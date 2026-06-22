@@ -1,26 +1,200 @@
 @import "tailwindcss";
+ 
+/* ============================================================
+   Somahorse.ai — design tokens
+   White canvas · deep-blue (#03045e) + mid-blue (#023e8a) brand
+   light-blue emanations · Raleway (body) + Space Grotesk (display)
+   ============================================================ */
+
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
+    /* Surfaces — light, clean, premium */
+  --background: 0 0% 100%;
+  --background-subtle: 213 100% 98%;
+  --surface: 210 40% 98%;
+  --surface-raised: 0 0% 100%;
+  --foreground: 233 64% 14%;
+  --muted-foreground: 222 18% 46%;
+  --border: 214 38% 91%;
+  --border-strong: 215 28% 82%;
+ 
+  /* Brand blues */
+  --navy: 239 96% 19%;        /* #03045e deep blue */
+  --navy-mid: 213 98% 27%;    /* #023e8a mid blue */
+  --blue-vivid: 218 92% 56%;  /* bright accent */
+  --blue-sky: 205 92% 60%;    /* light-blue emanation */
+  --blue-light: 213 100% 95%; /* soft tint */
+  --blue-mist: 210 100% 98%;  /* near-white blue */
+ 
+  /* Signal accents */
+  --accent-teal: 174 62% 45%;
+  --accent-amber: 36 96% 52%;
+ 
+  --ring: 213 98% 27%;
+}
+ 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+   --color-background: hsl(var(--background));
+  --color-background-subtle: hsl(var(--background-subtle));
+  --color-surface: hsl(var(--surface));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-border-strong: hsl(var(--border-strong));
+ 
+  --color-navy: hsl(var(--navy));
+  --color-navy-mid: hsl(var(--navy-mid));
+  --color-blue-vivid: hsl(var(--blue-vivid));
+  --color-blue-sky: hsl(var(--blue-sky));
+  --color-blue-light: hsl(var(--blue-light));
+  --color-blue-mist: hsl(var(--blue-mist));
+ 
+  --color-accent-teal: hsl(var(--accent-teal));
+  --color-accent-amber: hsl(var(--accent-amber));
+ 
+  --color-ring: hsl(var(--ring));
+ 
+  --font-sans: var(--font-raleway), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
+ 
+  --radius-pill: 999px;
+ 
+  --shadow-soft: 0 1px 3px 0 rgb(3 4 94 / 0.05), 0 1px 2px -1px rgb(3 4 94 / 0.05);
+  --shadow-card: 0 8px 30px -10px rgb(3 4 94 / 0.12), 0 2px 6px -2px rgb(3 4 94 / 0.06);
+  --shadow-elevated: 0 24px 60px -24px rgb(3 4 94 / 0.22), 0 6px 16px -8px rgb(3 4 94 / 0.1);
+  --shadow-nav: 0 10px 40px -12px rgb(2 62 138 / 0.18), 0 2px 6px -2px rgb(3 4 94 / 0.06);
+  --shadow-glow: 0 14px 40px -12px hsl(var(--navy-mid) / 0.45);
+  --shadow-calm: 0 40px 120px -50px rgb(2 62 138 / 0.35);
+ 
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 5s ease-in-out infinite;
+  --animate-marquee: marquee 28s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
-
+ 
+html {
+  scroll-behavior: smooth;
+  background: hsl(var(--background));
+}
+ 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+   margin: 0;
+  min-height: 100vh;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-raleway), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+ 
+::selection {
+  background: hsl(var(--navy-mid) / 0.16);
+  color: hsl(var(--navy));
+}
+ 
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+ 
+/* ─── Typography helpers ─── */
+.font-display { font-family: var(--font-space-grotesk), system-ui, sans-serif; }
+ 
+.h-hero {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  color: hsl(var(--navy));
+  font-size: clamp(2.6rem, 7.5vw, 5.6rem);
+}
+ 
+.h-section {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: hsl(var(--navy));
+  font-size: clamp(1.9rem, 4vw, 3.1rem);
+}
+ 
+.lead {
+  color: hsl(var(--muted-foreground));
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.7;
+  font-weight: 400;
+}
+ 
+.cue {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+ 
+.text-gradient {
+  background: linear-gradient(100deg, hsl(var(--navy)) 0%, hsl(var(--navy-mid)) 45%, hsl(var(--blue-vivid)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+ 
+/* ─── Backgrounds & emanations ─── */
+.dotted-grid {
+  background-image: radial-gradient(hsl(var(--navy-mid) / 0.10) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+ 
+.hero-field {
+  background:
+    radial-gradient(60% 50% at 50% 8%, hsl(var(--blue-sky) / 0.20), transparent 70%),
+    radial-gradient(45% 40% at 82% 22%, hsl(var(--navy-mid) / 0.16), transparent 70%),
+    radial-gradient(45% 45% at 16% 78%, hsl(var(--blue-vivid) / 0.14), transparent 70%),
+    radial-gradient(55% 45% at 50% 52%, hsl(var(--blue-light) / 0.55), transparent 75%),
+    linear-gradient(180deg, hsl(var(--blue-mist)), hsl(var(--background)) 70%);
+}
+ 
+.system-map-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--navy-mid) / 0.25), transparent);
+}
+ 
+/* ─── Keyframes ─── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
