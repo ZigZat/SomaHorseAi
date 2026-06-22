@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { isAdminUser } from "@/lib/auth/admin";
 import { getPostAuthRedirect } from "@/lib/auth/redirect";
 import { fetchProfile } from "@/lib/auth/profile";
 import { updateSession } from "@/lib/supabase/middleware";
 
 const AUTH_ROUTES = ["/login", "/signup"];
-const PROTECTED_PREFIXES = ["/onboarding", "/dashboard"];
+const PROTECTED_PREFIXES = ["/onboarding", "/dashboard", "/admin"];
 
 function isAuthRoute(pathname: string) {
   return AUTH_ROUTES.some(
@@ -29,6 +30,17 @@ export async function proxy(request: NextRequest) {
   }
 
   if (user) {
+    // The admin console is gated by the admins allow-list, independent of role.
+    if (pathname.startsWith("/admin")) {
+      if (!(await isAdminUser(supabase, user))) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/";
+        url.search = "";
+        return NextResponse.redirect(url);
+      }
+      return supabaseResponse;
+    }
+
     const profile = await fetchProfile(supabase, user.id);
     const destination = profile
       ? getPostAuthRedirect(profile.role, profile.onboarding_status)
@@ -41,6 +53,8 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
+    // Keep users on their resume point: pending users belong in onboarding,
+    // completed users belong in their dashboard.
     if (pathname.startsWith("/onboarding/")) {
       const expectedOnboarding = destination.startsWith("/onboarding")
         ? destination
@@ -57,6 +71,12 @@ export async function proxy(request: NextRequest) {
         url.pathname = destination;
         return NextResponse.redirect(url);
       }
+    }
+
+    if (pathname.startsWith("/dashboard") && destination.startsWith("/onboarding")) {
+      const url = request.nextUrl.clone();
+      url.pathname = destination;
+      return NextResponse.redirect(url);
     }
   }
 
